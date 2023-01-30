@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<p>Author creation form.</p>
+
+<!-- TODO: Add a <form> element here and use the form variable to show the labels & fields -->
+<form method="POST" action="{{ url_for('main.create_author') }}">
+    <fieldset>
+        <legend>Enter Author Name:</legend>
+        {{ form.name.label }}
+        {{ form.name }}
+
+        {{ form.biography.label }}
+        {{ form.name }}
+
+        {{ form.submit }}
+    </fieldset>
+{% endblock %}
