@@ -11,6 +11,11 @@
         <legend>Genre:</legend>
         {{ form.name.label }}
         {{ form.name }}
+        <ul>
+        {% for error in form.name.errors %}
+            <li class="error">{{ error }}</li>
+        { endfor }
+        </ul>
         {{ form.submit }}
     </fieldset>
 </form>

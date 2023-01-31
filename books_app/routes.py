@@ -3,7 +3,7 @@ import os
 from flask import Blueprint, request, render_template, redirect, url_for, flash
 from datetime import date, datetime
 from books_app.models import Book, Author, Genre, User
-from books_app.forms import BookForm, AuthorForm, GenreForm
+from books_app.forms import BookForm, AuthorForm, GenreForm, UserForm
 
 # Import app and db from events_app package so that we can run app
 from books_app.extensions import app, db
@@ -43,35 +43,33 @@ def create_book():
 
 @main.route('/create_author', methods=['GET', 'POST'])
 def create_author():
-    # TODO: Make an AuthorForm instance
-    form = AuthorForm()
-
-    # TODO: If the form was submitted and is valid, create a new Author object
-    if form.validate_on_submit():
+    # Make an AuthorForm instance
+    form_for_author = AuthorForm()
+    # If the form was submitted and is valid, create a new Author object
+    if form_for_author.validate_on_submit():
         new_author = Author(
-            name = form.name.data,
-            biography =form.biography.data,
+            name = form_for_author.name.data,
+            biography =form_for_author.biography.data,
         )
     # and save to the database, then flash a success message to the user and
         db.session.add(new_author)
         db.session.commit()
         flash("New author successfully created!")
         # redirect to the homepage
-        return redirect(url_for('main.homepage', form=form)) 
-
-    # TODO: Send the form object to the template, and use it to render the form
+        return redirect(url_for('main.homepage'))
+    # Send the form object to the template, and use it to render the form
     # fields
-    return render_template('create_author.html', form=form)
+    return render_template('create_author.html', form=form_for_author)
 
 @main.route('/create_genre', methods=['GET', 'POST'])
 def create_genre():
-    # TODO: Make a GenreForm instance
-    form = GenreForm()
+    # Make a GenreForm instance
+    form_for_genre = GenreForm()
     
-    # TODO: If the form was submitted and is valid, create a new Genre object
-    if form.validate_on_submit():
+    # If the form was submitted and is valid, create a new Genre object
+    if form_for_genre.validate_on_submit():
         new_genre = Genre(
-            name = form.name.data
+            name = form_for_genre.name.data
         )
     # and save to the database, then flash a success message to the user and
         db.session.add(new_genre)
@@ -79,9 +77,9 @@ def create_genre():
         flash("New genre successfully created!")
     # redirect to the homepage
         return redirect(url_for('main.homepage')) 
-    # TODO: Send the form object to the template, and use it to render the form
+    # Send the form object to the template, and use it to render the form
     # fields
-    return render_template('create_genre.html', form=form)
+    return render_template('create_genre.html', form=form_for_genre)
 
 @main.route('/create_user', methods=['GET', 'POST'])
 def create_user():
@@ -93,7 +91,7 @@ def book_detail(book_id):
     book = Book.query.get(book_id)
     form = BookForm(obj=book)
 
-    # TODO: If the form was submitted and is valid, update the fields in the 
+    # If the form was submitted and is valid, update the fields in the 
     # Book object and save to the database, then flash a success message to the 
     # user and redirect to the book detail page
     if form.validate_on_submit():
@@ -111,9 +109,17 @@ def book_detail(book_id):
 
 @main.route('/profile/<username>')
 def profile(username):
-    # TODO: Make a query for the user with the given username, and send to the
+    # Make a query for the user with the given username, and send to the
     # template
+    user = User.query.filter_by(username=username)
+    form_for_user = UserForm()
 
+    if form_for_user.validate_on_submit():
+        user.username = form_for_user.data
+        db.session.commit
+        flash("Success!")
+        return redirect(url_for('main.homepage'))
+    return render_template('profile.html', username=username)
     # STRETCH CHALLENGE: Add ability to modify a user's username or favorite 
     # books
-    return render_template('profile.html', username=username)
+    

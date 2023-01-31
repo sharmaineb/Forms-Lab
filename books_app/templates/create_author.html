@@ -11,10 +11,19 @@
         <legend>Enter Author Name:</legend>
         {{ form.name.label }}
         {{ form.name }}
-
+        <ul>
+        {% for error in form.name.errors %}
+            <li class="error">{{ error }}</li>
+        {% endfor %}
+        </ul>
         {{ form.biography.label }}
-        {{ form.name }}
-
+        {{ form.biography }}
+        <ul>
+        {% for error in form.biography.errors %}
+            <li class="error">{{ error }}</li>
+        {% endfor %}
+        </ul>
+        
         {{ form.submit }}
     </fieldset>
 {% endblock %}

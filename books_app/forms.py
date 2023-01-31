@@ -54,3 +54,14 @@ class GenreForm(FlaskForm):
 
     # - a submit button
     submit = SubmitField('Submit')
+
+class UserForm(FlaskForm):
+    """Form to create user"""
+    # the user's name
+    username = StringField(
+        'Username', validators=[
+            DataRequired(),
+            Length(min=3, max=80)
+        ]
+    )
+    
