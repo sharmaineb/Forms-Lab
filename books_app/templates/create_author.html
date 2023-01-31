@@ -6,6 +6,7 @@
 
 <!-- TODO: Add a <form> element here and use the form variable to show the labels & fields -->
 <form method="POST" action="{{ url_for('main.create_author') }}">
+    {{ form.csrf_token }}
     <fieldset>
         <legend>Enter Author Name:</legend>
         {{ form.name.label }}

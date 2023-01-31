@@ -50,14 +50,14 @@ def create_author():
     if form.validate_on_submit():
         new_author = Author(
             name = form.name.data,
-            biography =form.biography.data
+            biography =form.biography.data,
         )
     # and save to the database, then flash a success message to the user and
         db.session.add(new_author)
         db.session.commit()
-        flash("Success!")
+        flash("New author successfully created!")
         # redirect to the homepage
-        return redirect(url_for('main.home', )) # fix this
+        return redirect(url_for('main.homepage', form=form)) 
 
     # TODO: Send the form object to the template, and use it to render the form
     # fields
@@ -76,9 +76,9 @@ def create_genre():
     # and save to the database, then flash a success message to the user and
         db.session.add(new_genre)
         db.session.commit()
-
+        flash("New genre successfully created!")
     # redirect to the homepage
-        return redirect(url_for('main.home', )) # fix later
+        return redirect(url_for('main.homepage')) 
     # TODO: Send the form object to the template, and use it to render the form
     # fields
     return render_template('create_genre.html', form=form)
@@ -96,6 +96,16 @@ def book_detail(book_id):
     # TODO: If the form was submitted and is valid, update the fields in the 
     # Book object and save to the database, then flash a success message to the 
     # user and redirect to the book detail page
+    if form.validate_on_submit():
+        book.title = form.title.data,
+        book.publish_date = form.publish_date,
+        book.author = form.author.data,
+        book.audience = form.audience.data,
+        book.genres = form.genres.data,
+
+        db.session.commit()
+        flash("Book Updated!")
+        return redirect(url_for('main.book_detail', book_id=-book_id))
 
     return render_template('book_detail.html', book=book, form=form)
 
